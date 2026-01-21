@@ -34,8 +34,6 @@ import { Trash, Edit, Loader2, Pencil, Eye } from "lucide-react";
 import AddExpense from "@/components/popups/addNews/addExpense";
 import { useParams } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import DeleteVente from "@/components/popups/DeleteItems/deleteVente";
 
 interface Client {

@@ -76,14 +76,14 @@ export async function DELETE(
     }
 
     // Supprimer toutes les opérations liées (EmballageOperation)
-    await prisma.emballageOperation.deleteMany({
-      where: {
-        OR: [
-          { produitFiniId: id },
-          { emballageId: id },
-        ],
-      },
-    });
+    // await prisma.emballageOperation.deleteMany({
+    //   where: {
+    //     OR: [
+    //       { produitFiniId: id },
+    //       { emballageId: id },
+    //     ],
+    //   },
+    // });
 
     // Supprimer le produit
     await prisma.produit.delete({ where: { id } });
