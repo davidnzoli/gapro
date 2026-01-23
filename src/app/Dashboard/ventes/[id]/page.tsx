@@ -181,23 +181,19 @@ export default function DetailVente() {
 
             {ventes && (
               <>
-               <Button
-                variant="outline"
-                onClick={() => {
-                  fetchventesId(ventes.id);
-                }}
-                className=" bg-gray-700 font-normal text-[12px] xl:text-base text-white rounded-none  p-3 cursor-pointer hover:bg-[#7fc4f9]"
-              >
-                Imprimer la facture
-                <Printer className="h-8 w-8 cursor-pointer" />
-              </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    fetchventesId(ventes.id);
+                  }}
+                  className=" bg-gray-700 font-normal text-[12px] xl:text-base text-white rounded-none  p-3 cursor-pointer hover:bg-[#7fc4f9]"
+                >
+                  Imprimer la facture
+                  <Printer className="h-8 w-8 cursor-pointer" />
+                </Button>
                 <DeleteVente id={ventes.id} onDeletes={handleDeleteVente} />
               </>
-             
             )}
-           
-               
-        
           </div>
         </div>
         <h1 className="pl-2 lg:text-xl text-2xl lg:w-xl w-[100%]  text-[#33334b]">
@@ -266,8 +262,7 @@ export default function DetailVente() {
                         {ligne.quantite} Pièce(s)
                       </TableCell>
                       <TableCell className="text-left lg:text-md text-[12px]">
-                        {ligne.prixUnitaire ?? 0} {""}
-                        $
+                        {ligne.prixUnitaire ?? 0} {""}$
                       </TableCell>
                       <TableCell className="text-center lg:text-md text-[12px]">
                         <span className="p-1 rounded-full text-[10px] bg-yellow-100 text-yellow-800">
@@ -276,7 +271,8 @@ export default function DetailVente() {
                           ).toLocaleString("fr-FR", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
-                          })}{""} $
+                          })}
+                          {""} $
                         </span>
                       </TableCell>
                       <TableCell className="text-center ">✅</TableCell>
@@ -336,15 +332,16 @@ export default function DetailVente() {
       <div style={{ display: "none" }}>
         <div ref={componentRef}>
           <div className="flex flex-col w-[100%] p-10 justify-center gap-15 items-center">
-            <div className="flex flex-col w-[100%] gap-1 justify-center items-center font-bold text-gray-700">
+            <div className="flex flex-col w-[100%] gap-1 justify-center p-0 items-center font-bold text-gray-700">
               <h1>GA-PRO BUSINESS</h1>
-              <div className="flex w-[100%] mb-2 items-center  justify-center">
+              <div className="flex w-[100%] bg-gray-400 items-center justify-center">
                 <Image
-                  src="/logopro1.svg"
+                  src="/gapro.svg"
                   alt="logo"
-                  width={100}
+                  width={1000}
                   height={0}
-                  className="rounded-xl m-0 object-cover p-2 "
+                   className=" mt-4 h-50  object-cover object-cover p-0 "
+                  // className="rounded-4xl  pb-8 lg:pb-1 h-50 m-0 object-cover p-0 "
                 />
               </div>
               <h1 className="text-xl font-bold text-black">FACTURE</h1>
