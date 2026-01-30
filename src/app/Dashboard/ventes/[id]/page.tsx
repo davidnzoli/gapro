@@ -49,6 +49,7 @@ interface ItemsProduit {
   nom: string;
   unite: string;
   prix?: number;
+  devise:String;
   stock_initial: number | null;
   seuil_minimum: number | null;
   date_creation: string;
@@ -334,13 +335,13 @@ export default function DetailVente() {
           <div className="flex flex-col w-[100%] p-10 justify-center gap-15 items-center">
             <div className="flex flex-col w-[100%] gap-1 justify-center p-0 items-center font-bold text-gray-700">
               <h1>GA-PRO BUSINESS</h1>
-              <div className="flex w-[100%] bg-gray-400 items-center justify-center">
+              <div className="flex w-[100%] bg-blue-300 items-center justify-center">
                 <Image
                   src="/gapro.svg"
                   alt="logo"
                   width={1000}
                   height={0}
-                   className=" mt-4 h-50  object-cover object-cover p-0 "
+                   className=" mt-4 h-50 text-red-500 object-cover object-cover p-0 "
                   // className="rounded-4xl  pb-8 lg:pb-1 h-50 m-0 object-cover p-0 "
                 />
               </div>
@@ -376,7 +377,7 @@ export default function DetailVente() {
 
                   <div className="flex flex-col w-[100%] gap-1 justify-end items-end">
                     <h1 className="font-bold text-gray-700text-end ">
-                      GA-PRO Savonnerie Artisanale
+                      GA-PRO Boutique de vente Téléphone
                     </h1>
                     <h1 className="font-bold text-gray-700 text-end">
                       Experience de plus de 3ans dans l'industrualisation
@@ -424,7 +425,7 @@ export default function DetailVente() {
                           {Number(el.prixUnitaire).toLocaleString("fr-FR", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
-                          })}
+                          })}{el.produit?.devise}
                         </td>
                         <td className="border px-2 py-1 text-center font-semibold text-gray-700">
                           {el.quantite}{" "}
@@ -433,7 +434,7 @@ export default function DetailVente() {
                           {Number(el.sousTotal).toLocaleString("fr-FR", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
-                          })}
+                          })}$
                         </td>
                         <td className="border px-2 py-1 text-center font-semibold text-gray-700">
                           Espèce
@@ -451,16 +452,16 @@ export default function DetailVente() {
                         colSpan={3}
                         className="border px-2 py-1 text-center font-bold text-lg bg-gray-100"
                       >
-                        {PrixTotalFormat.toLocaleString()}
-                        FC
+                        {PrixTotalFormat.toLocaleString()} $
+                        
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <div className=" w-full border-1 border-gray-300 "></div>
-            <h1>Merci pour votre confiance ! À BIENTÔT</h1>
+            <div className=" w-full border-1 border-gray-300  "></div>
+            <h1 className="text-blue-300">Merci pour votre confiance ! À BIENTÔT</h1>
             <div className=" w-full border-1 border-gray-300"></div>
           </div>
         </div>

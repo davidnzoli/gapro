@@ -15,25 +15,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  
 } from "@/components/ui/select";
+import { SelectViewport } from "@radix-ui/react-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Devise } from "@/components/types/AllTypeTables";
 
 interface UpdateProduitItemsProps {
   onClose: () => void;
   id: string;
   onUpdate: () => void;
 }
-
-const ProductionItems = [
-  { id: 1, name: "Ordinaire" },
-  { id: 2, name: "MHG" },
-  { id: 3, name: "Boxes" },
-  { id: 4, name: "B15" },
-  { id: 5, name: "UD25" },
-  { id: 6, name: "Klg" },
-];
 
 export default function UpdatedProduit({
   onClose,
@@ -45,6 +39,7 @@ export default function UpdatedProduit({
   const [seuil_minimum, setSeuil_minimum] = React.useState("");
   const [stock_initial, setStock_initial] = React.useState("");
   const [prix, setPrix] = React.useState("");
+  const [devise, setDevise] = React.useState("");
   const [nombre_bars, setNombre_bars] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -63,6 +58,7 @@ export default function UpdatedProduit({
         setNom(data.nom || "");
         setUnite(data.unite || "");
         setPrix(data.prix || "");
+        setDevise(data.devise || "")
         setNombre_bars(data.nombre_bars || "");
         setSeuil_minimum(data.seuil_minimum ? String(data.seuil_minimum) : "");
         setStock_initial(data.stock_initial ? String(data.stock_initial) : "");
@@ -121,6 +117,7 @@ export default function UpdatedProduit({
           seuil_minimum: parseFloat(seuil_minimum) || null,
           stock_initial: parseFloat(stock_initial) || null,
           prix: parseFloat(prix) || null,
+          devise,
           nombre_bars: parseFloat(nombre_bars) || null,
         }),
       });
@@ -180,6 +177,27 @@ export default function UpdatedProduit({
             required
             className="w-[100%] h-12"
           />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="devise">Devise</Label>
+          <Select
+            value={devise}
+            required
+            onValueChange={setDevise}
+          >
+            <SelectTrigger id="devise" className="w-full h-12">
+              <SelectValue placeholder="Sélectionner une devise" />
+            </SelectTrigger>
+            <SelectContent className="w-[90%]">
+              <SelectViewport className="max-h-60 overflow-y-auto">
+                {Devise.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.indice2}>
+                    {cat.designation}
+                  </SelectItem>
+                ))}
+              </SelectViewport>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid gap-2 w-full">
           <Label htmlFor="stock_initial">stock_initial</Label>

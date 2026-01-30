@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { SelectViewport } from "@radix-ui/react-select";
+import { Devise } from "@/components/types/AllTypeTables";
 
 interface ProduitItem {
   id: string;
@@ -29,6 +30,7 @@ interface ProduitItem {
   nombre_bars: number | null;
   stock_initial: number | null;
   prix: number | null;
+  devise:string;
   seuil_minimum: number | null;
   date_creation: string;
   categorie: {
@@ -64,10 +66,6 @@ export default function AddProduit({ onClosed, onAdd }: AddDataDialogContent) {
     devise: "",
   });
 
-  const Devise = [
-    { id: "1", name: "Dollar Americain", indice: "USD" },
-    { id: "2", name: "Francs Congolais", indice: "CDF" },
-  ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -111,11 +109,12 @@ export default function AddProduit({ onClosed, onAdd }: AddDataDialogContent) {
       categorieId: formData.categorieId,
       nombre_bars: formData.nombre_bars,
       prix: formData.prix !== "" ? Number(formData.prix) : 0,
+      devise:formData.devise,
       stock_initial:
         formData.stock_initial !== "" ? Number(formData.stock_initial) : 0,
       seuil_minimum:
         formData.seuil_minimum !== "" ? Number(formData.seuil_minimum) : 0,
-        devise:formData.devise
+        
     };
 
     try {
@@ -224,8 +223,8 @@ export default function AddProduit({ onClosed, onAdd }: AddDataDialogContent) {
             <SelectContent className="w-[90%]">
               <SelectViewport className="max-h-60 overflow-y-auto">
                 {Devise.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
+                  <SelectItem key={cat.id} value={cat.indice2}>
+                    {cat.designation}
                   </SelectItem>
                 ))}
               </SelectViewport>

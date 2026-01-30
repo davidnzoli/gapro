@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
         categorieId: body.categorieId,
         stock_initial: body.stock_initial,
         prix: body.prix || null,
+        devise: body.devise,
         seuil_minimum: body.seuil_minimum,
         nombre_bars:body.nombre_bars || null,
       },

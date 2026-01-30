@@ -24,7 +24,7 @@ import {
   PrinterIcon,
   Search,
   ShoppingCart,
-  Calendar, // 🟢 Import pour l'icône calendrier
+  Calendar,
 } from "lucide-react";
 import {
   Dialog,
@@ -308,7 +308,7 @@ export default function ListeVentes() {
                           ? vente.total.toLocaleString("fr-FR", {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2,
-                            }) + "$"
+                            }) 
                           : 0}
                       </TableCell>
 

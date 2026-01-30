@@ -31,6 +31,7 @@ interface ItemsProduit {
   categorieId: string;
   stock_initial: number | null;
   prix: number | null;
+  devise:string;
   seuil_minimum: number | null;
   nombre_bars: number | null;
   date_creation: string;
@@ -206,7 +207,10 @@ export default function ListeProduits() {
                         {p.stock_initial}
                       </TableCell>
                       <TableCell className="lg:text-md text-[12px]">
-                        {p.prix}
+                        {p.prix?.toLocaleString("fr-FR", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }) }{" "}{p.devise}
                       </TableCell>
                       <TableCell className="lg:text-md text-[12px]">
                         {new Date(p.date_creation).toLocaleString("fr-FR")}
