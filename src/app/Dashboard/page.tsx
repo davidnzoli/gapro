@@ -483,7 +483,7 @@ export default function ChartDemo() {
                     PRODUITS EN STOCK
                   </h1>
                   <h1 className="lg:text-md text-[12px] text-[#0EA5E9] flex gap-1 text-center justify-center items-center">
-                    Total des produits en générale
+                    Total des articles en générale
                     <span>
                       <Package />
                     </span>
@@ -504,7 +504,7 @@ export default function ChartDemo() {
                       ENTRÉES
                     </h1>
                     <h1 className="lg:text-md text-[12px] text-[#0EA5E9] flex gap-1 text-center justify-center items-center">
-                      Total entrée de produits finis
+                      Total entrée des articles
                       <span>
                         <ArrowDown />
                       </span>
@@ -523,7 +523,7 @@ export default function ChartDemo() {
                       SORTIES
                     </h1>
                     <h1 className="lg:text-md text-[12px] text-[#0EA5E9] flex gap-1 text-center justify-center items-center">
-                      Total sortie de produits finis
+                      Total sortie des articles
                       <span>
                         <ArrowUp />
                       </span>
@@ -602,7 +602,7 @@ export default function ChartDemo() {
                   </div>
 
                   {/* Carte 2: Production Totale */}
-                  <div className="w-[100%] h-48 p-4 rounded-sm shadow-sm shadow-gray-200 flex flex-col justify-between bg-white border-l-4 border-green-500">
+                  {/* <div className="w-[100%] h-48 p-4 rounded-sm shadow-sm shadow-gray-200 flex flex-col justify-between bg-white border-l-4 border-green-500">
                     <div className="flex justify-between items-start w-full">
                       <h1 className="text-xl font-bold text-gray-800">
                         {stats.totalProduitFiniOperationEmballage.toLocaleString(
@@ -617,10 +617,10 @@ export default function ChartDemo() {
                         PRODUCTION TOTALE
                       </h1>
                       <h1 className="text-sm text-gray-400">
-                        Quantité des produits finis déjà emballés
+                        Quantité des articles déjà emballés
                       </h1>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Carte 3: Dépenses Totales */}
                   <div className="w-[100%] h-48 p-4 rounded-sm shadow-sm shadow-gray-200 flex flex-col justify-between bg-white border-l-4 border-red-500">

@@ -333,15 +333,15 @@ export default function DetailVente() {
       <div style={{ display: "none" }}>
         <div ref={componentRef}>
           <div className="flex flex-col w-[100%] p-10 justify-center gap-15 items-center">
-            <div className="flex flex-col w-[100%] gap-1 justify-center p-0 items-center font-bold text-gray-700">
+            <div className="flex flex-col w-[100%] justify-center p-0 items-center font-bold text-gray-700">
               <h1>GA-PRO BUSINESS</h1>
-              <div className="flex w-[100%] bg-blue-300 items-center justify-center">
+              <div className="flex w-[100%] items-center justify-center">
                 <Image
-                  src="/gapro.svg"
+                  src="/gaprojob.png"
                   alt="logo"
-                  width={1000}
+                  width={100}
                   height={0}
-                   className=" mt-4 h-50 text-red-500 object-cover object-cover p-0 "
+                   className=" mt-4 h-50 text-red-500 object-cover p-0 "
                   // className="rounded-4xl  pb-8 lg:pb-1 h-50 m-0 object-cover p-0 "
                 />
               </div>

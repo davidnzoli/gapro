@@ -75,7 +75,7 @@ export default function LoginPage() {
         <div className="lg:w-[50%] w-full h-full flex flex-col justify-center items-center lg:p-10 pt-10">
           <div className="flex w-[100%] h-50 mb-10 items-center  justify-center">
             <Image
-              src="/gapro.svg"
+              src="/gaprojob.png"
               alt="logo"
               width={1000}
               height={0}

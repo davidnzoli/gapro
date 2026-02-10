@@ -60,6 +60,7 @@ interface AddDataDialogContent {
 export default function AllReport({ onClosed }: AddDataDialogContent) {
   const [loading, setLoading] = useState(false);
   const [produits, setProduits] = useState<ProduitItem[]>([]);
+  const [mouvements, setMouvements] = useState<Mouvement[]>([]);
   const [totalEntree, setTotalEntree] = useState<number>(0);
   const [totalSortie, setTotalSortie] = useState<number>(0);
   const [StockFinale, setStockFinale] = useState<number>(0);
@@ -117,13 +118,27 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
       console.log("Valeur startDate:", startDate);
       console.log("Valeur endDate:", endDate);
 
-      const [resMouvements, resEmballages] = await Promise.all([
-        fetch("/api/mouvements"),
-        fetch("/api/operationBoxs"),
-      ]);
+      // const [resMouvements, resEmballages] = await Promise.all([
+      //   fetch("/api/mouvements"),
+      //   fetch("/api/operationBoxs"),
+      // ]);
 
-      const dataMouvements = await resMouvements.json();
-      const dataEmballages = await resEmballages.json();
+      // useEffect(()=>{
+      //   const fetchMouvements = async () => {
+      //   const res = await fetch("/api/mouvements");
+      //   const data = await res.json();
+
+      //   if (res.ok && data.success) {
+      //     setMouvements(data.data);
+      //   } else {
+      //     setMouvements([]);
+      //   }
+      // };
+
+      // fetchMouvements()
+      // },[])
+      // const dataMouvements = await resMouvements.json();
+      // const dataEmballages = await resEmballages.json();
 
       // 🔹 Conversion ISO sûre
       const start = new Date(`${startDate}T00:00:00`).getTime();
@@ -140,7 +155,7 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
       //   return !isNaN(dateMouvement);
       // });
 
-      const filtresMouv = (dataMouvements?.data ?? []).filter((m: any) => {
+      const filtresMouv = (mouvements ?? []).filter((m: Mouvement) => {
         const dateMouvement = new Date(
           m.date_mouvement.replace(" ", "T")
         ).getTime();
@@ -155,7 +170,7 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
 
       // state des errors
 
-      if (!dataMouvements.length)
+      if (!mouvements.length)
         return (
           <div className="text-gray-500 w-[100%] h-full flex justify-center items-center text-center p-4">
             Aucun mouvement trouvé pour le moment.
@@ -163,30 +178,8 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
         );
 
       // 🔹 Filtrage emballages
-      const filtresEmballages = dataEmballages.data
-        .filter((op: any) => {
-          const dateOp = new Date(
-            op.date_operation.replace(" ", "T")
-          ).getTime();
-          console.log(
-            "Date emballage:",
-            op.date_operation,
-            "=>",
-            new Date(dateOp)
-          );
-          return dateOp >= start && dateOp <= end;
-        })
-        .map((op: any) => ({
-          id: op.id,
-          date_mouvement: op.date_operation,
-          quantite: op.quantiteEmballage,
-          type: "SORTIE",
-          observation: `Produit fini: ${op.produitFini?.nom ?? ""}`,
-          produitId: op.emballageId,
-        }));
 
       console.log("Mouvements filtrés:", filtresMouv);
-      console.log("Emballages filtrés:", filtresEmballages);
 
       // 🔹 Totaux
       const totalEntree = filtresMouv
@@ -197,17 +190,9 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
         .filter((m: any) => m.type === "SORTIE")
         .reduce((acc: number, m: any) => acc + Number(m.quantite), 0);
 
-      const totalSortieEmballage = filtresEmballages.reduce(
-        (acc: number, m: any) => acc + Number(m.quantite),
-        0
-      );
-
-      const stockFinal = totalEntree - totalSortie - totalSortieEmballage;
-
-      setMouvementsGeneraux([...filtresMouv, ...filtresEmballages]);
+      setMouvementsGeneraux([...filtresMouv]);
       setTotalEntreeGenerale(totalEntree);
-      setTotalSortieGenerale(totalSortie + totalSortieEmballage);
-      setStockFinalGenerale(stockFinal);
+      setTotalSortieGenerale(totalSortie);
     } catch (err) {
       console.error(err);
       toast.error("Erreur lors de la génération du rapport.");
@@ -264,19 +249,15 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
 
       setLoading(true);
       try {
-        const [resMouvements, resEmballages] = await Promise.all([
-          fetch("/api/mouvements"),
-          fetch("/api/operationBoxs"),
-        ]);
+        const [res] = await Promise.all([fetch("/api/mouvements")]);
 
-        const dataMouvements = await resMouvements.json();
-        const dataEmballages = await resEmballages.json();
+        const data = await res.json();
 
         const start = new Date(startDate + "T00:00:00").getTime();
         const end = new Date(endDate + "T23:59:59").getTime();
 
         // Filtrer mouvements classiques
-        const filtresMouv = dataMouvements.data.filter((m: Mouvement) => {
+        const filtresMouv = data.data.filter((m: Mouvement) => {
           const dateMouvement = new Date(m.date_mouvement).getTime();
           return (
             m.produitId.toString() === produitSelectionne.id.toString() &&
@@ -284,24 +265,6 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
             dateMouvement <= end
           );
         });
-
-        // Filtrer mouvements emballages si le produit sélectionné est un emballage
-        const filtresEmballages = dataEmballages.data
-          .filter((op: any) => {
-            const dateOp = new Date(op.date_operation).getTime();
-            return (
-              op.emballageId === produitSelectionne.id &&
-              dateOp >= start &&
-              dateOp <= end
-            );
-          })
-          .map((op: any) => ({
-            id: op.id,
-            date_mouvement: op.date_operation,
-            quantite: op.quantiteEmballage,
-            type: "SORTIE",
-            observation: `Produit fini: ${op.produitFini.nom}`,
-          }));
 
         const totalEntree = filtresMouv
           .filter((m: Mouvement) => m.type === "ENTREE")
@@ -311,18 +274,11 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
           .filter((m: Mouvement) => m.type === "SORTIE")
           .reduce((acc: number, m: Mouvement) => acc + Number(m.quantite), 0);
 
-        const totalSortieEmballage = filtresEmballages.reduce(
-          (acc: number, m: any) => acc + Number(m.quantite),
-          0
-        );
-
-        const stockFinal = totalEntree - totalSortie - totalSortieEmballage;
-
         // Combiner les mouvements pour affichage
-        setMouvementsFiltres([...filtresMouv, ...filtresEmballages]);
+        setMouvementsFiltres([...filtresMouv]);
         setTotalEntree(totalEntree);
-        setTotalSortie(totalSortie + totalSortieEmballage);
-        setStockFinale(stockFinal);
+        setTotalSortie(totalSortie);
+        setStockFinale(totalEntree - totalSortie);
       } catch (err) {
         console.error("Erreur lors de la récupération des mouvements :", err);
         // Ici tu peux ajouter un toast si tu utilises sonner ou shadcn toast
@@ -405,8 +361,8 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
                               !selectedCategorieId
                                 ? "Choisir une catégorie d'abord"
                                 : produitIdParCat.length === 0
-                                  ? "Aucun produit trouvé"
-                                  : "Choisir un produit"
+                                ? "Aucun produit trouvé"
+                                : "Choisir un produit"
                             }
                           />
                         </SelectTrigger>
@@ -445,7 +401,8 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
                 {produitSelectionne && (
                   <div className=" mt-6 p-4 bg-white shadow rounded">
                     <h2 className="text-xl font-semibold mb-4">
-                      {produitSelectionne.nom}{""}
+                      {produitSelectionne.nom}
+                      {""}
                       {produitSelectionne.nombre_bars} barres
                     </h2>
                     <div className="font-bold">
@@ -457,11 +414,11 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
                     <div style={{ display: "none" }}>
                       <div ref={componentRef}>
                         <div className="flex flex-col w-[100%] p-10 justify-center gap-15 items-center">
-                          <div className="flex flex-col w-[100%] gap-1 justify-center items-center font-bold text-gray-700">
+                          <div className="flex flex-col w-[100%] justify-center items-center font-bold text-gray-700">
                             <h1>GA-PRO BUSINESS</h1>
-                            <div className="flex w-[100%] mb-2 items-center  justify-center">
+                            <div className="flex w-[100%] items-center  justify-center">
                               <Image
-                                src="/gapro.svg"
+                                src="/gaprojob.png"
                                 alt="logo"
                                 width={100}
                                 height={0}
@@ -534,8 +491,7 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
                                           ).toLocaleDateString()}
                                         </td>
                                         <td className="border px-2 py-1">
-                                          {categorieNom}
-                                          {" "}
+                                          {categorieNom}{" "}
                                           {produitAssocie?.nom || "Emballage"}
                                         </td>
                                         <td className="border px-2 py-1">
@@ -719,11 +675,11 @@ export default function AllReport({ onClosed }: AddDataDialogContent) {
                 <div style={{ display: "none" }}>
                   <div ref={componentRef}>
                     <div className="flex flex-col w-[100%] p-10 justify-center gap-15 items-center">
-                      <div className="flex flex-col w-[100%] gap-1 justify-center items-center font-bold text-gray-700">
+                      <div className="flex flex-col w-[100%] justify-center items-center font-bold text-gray-700">
                         <h1>GA-PRO BUSINESS</h1>
-                        <div className="flex w-[100%] mb-2 items-center  justify-center">
+                        <div className="flex w-[100%] items-center  justify-center">
                           <Image
-                            src="/logopro1.svg"
+                            src="/gaprojob.png"
                             alt="logo"
                             width={100}
                             height={0}
