@@ -73,13 +73,14 @@ export default function LoginPage() {
         <div className="hidden lg:block w-px bg-gray-300"></div>
 
         <div className="lg:w-[50%] w-full h-full flex flex-col justify-center items-center lg:p-10 pt-10">
-          <div className="flex w-[100%] h-50 mb-10 items-center  justify-center">
+          <div className="flex w-[100%]  h-72 items-center justify-center">
             <Image
               src="/gaprojob.png"
               alt="logo"
-              width={1000}
+              width={400}
               height={0}
-              className="rounded-4xl  pb-8 lg:pb-1 h-50 m-0 object-cover p-0 "
+              objectFit="cover"
+              className="rounded-4xl pb-8 lg:pb-1 m-0 object-cover p-0 "
             />
           </div>
           <h2 className="md:text-2xl text-md font-bold text-gray-800 text-center md:mb-6 mb-2">

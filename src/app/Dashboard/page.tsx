@@ -141,7 +141,7 @@ interface AggregatedStats {
   totalVentes: number;
   totalProductionsEntree: number;
   totalProductionsSortie: number;
-  totalProduitFiniOperationEmballage: number;
+  totalProduitOperation: number;
   totalDepenses: number;
 }
 
@@ -175,7 +175,7 @@ export default function ChartDemo() {
   // -----------------------------------------------------
   const filteredVentes = useMemo(() => {
     // 1. Début du filtrage (toutes les ventes)
-    let filtered = ventes;
+    let filtered = ventes; 
 
     // 2. FILTRAGE PAR PÉRIODE (Date de Vente)
     if (startDate && endDate) {
@@ -227,7 +227,7 @@ export default function ChartDemo() {
     totalVentes: 0,
     totalProductionsEntree: 0,
     totalProductionsSortie: 0,
-    totalProduitFiniOperationEmballage: 0,
+    totalProduitOperation: 0,
     totalDepenses: 0,
   });
 
@@ -400,9 +400,10 @@ export default function ChartDemo() {
         }
 
         const data = await res.json();
-
+console.log("data avant : ", data)
         if (res.ok) {
             setStats(data);
+            console.log("data : ", data)
         } else {
             toast.error(data.message || "Erreur lors de la récupération");
         }

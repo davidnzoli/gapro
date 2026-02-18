@@ -1,12 +1,14 @@
 
+import { useReactToPrint } from "react-to-print";
 import { prisma } from "./prisma";
+import { toast } from "sonner";
 
 
 interface PeriodData {
   totalVentes: number;
   totalProductionsEntree: number;
   totalProductionsSortie: number;
-  totalProduitFiniOperationEmballage: number;
+  totalProduitOperation: number;
   totalDepenses: number;
 }
 
@@ -28,12 +30,7 @@ export async function getAggregatedData(
       _sum: { quantite: true },
       where: {
         type: "ENTREE",
-        date_mouvement: { gte: startDate, lte: endDate },
-        produit: {
-          categorie: {
-            nom: { equals: "produit fini", mode: "insensitive" }
-          }
-        }
+        date_mouvement: { gte: startDate, lte: endDate }
       },
     });
 
@@ -43,29 +40,19 @@ export async function getAggregatedData(
       where: {
         type: "SORTIE",
         date_mouvement: { gte: startDate, lte: endDate },
-        produit: {
-          categorie: {
-            nom: { equals: "produit fini", mode: "insensitive" }
-          }
-        }
       },
     });
 
     // 4. Stock Actuel des produits finis (Simulation de l'emballage)
     const stockFini = await prisma.produit.aggregate({
-      _sum: { stock_initial: true },
-      where: {
-        categorie: {
-          nom: { equals: "produit fini", mode: "insensitive" }
-        }
-      }
+      _sum: { stock_initial: true }
     });
 
     return {
       totalVentes: ventesAggregate._sum.total || 0,
       totalProductionsEntree: Number(entreeAggregate._sum.quantite) || 0,
       totalProductionsSortie: Number(sortiesAggregate._sum.quantite) || 0,
-      totalProduitFiniOperationEmballage: Number(stockFini._sum.stock_initial) || 0,
+      totalProduitOperation: Number(stockFini._sum.stock_initial) || 0,
       totalDepenses: 0, // À connecter avec votre table dépenses plus tard
     };
   } catch (error) {
@@ -73,3 +60,4 @@ export async function getAggregatedData(
     throw error;
   }
 }
+
